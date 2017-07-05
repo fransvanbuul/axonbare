@@ -1,31 +1,18 @@
-import org.axonframework.commandhandling.CommandBus;
 import org.axonframework.common.AxonConfigurationException;
 import org.axonframework.config.Configuration;
-import org.axonframework.config.Configurer;
-import org.axonframework.config.DefaultConfigurer;
 import org.axonframework.config.ModuleConfiguration;
 import org.axonframework.messaging.correlation.CorrelationDataProvider;
-import org.axonframework.serialization.json.JacksonSerializer;
 
-public class Main {
+/**
+ * Created by Frans van Buul on 5-7-2017.
+ */
+public class Utils {
 
-    public static void main(String[] args) {
-        Configurer configurer = DefaultConfigurer.defaultConfiguration();
-        configurer.configureSerializer(c -> { return new JacksonSerializer(); });
-        configurer.registerCommandHandler(c -> { return new AddSomeCmdHandler(); });
-
-        Configuration config = configurer.buildConfiguration();
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> { config.shutdown(); }));
-        config.start();
-        dumpconfig(config);
-
-        config.commandGateway().send(new AddSomeCmd(5));
-
-
-
+    private Utils() {
+        throw new Error("non-instantiable class");
     }
 
-    public static void dumpconfig(Configuration config) {
+    public static void dumpAxonConfig(Configuration config) {
         System.out.println("parameterResolverFactory: " + config.parameterResolverFactory());
         System.out.println("commandBus: " + config.commandBus());
         System.out.println("commandGateway: " + config.commandGateway());
@@ -59,4 +46,7 @@ public class Main {
         }
 
     }
+
+
+
 }
